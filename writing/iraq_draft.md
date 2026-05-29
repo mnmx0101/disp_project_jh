@@ -1,6 +1,6 @@
 # Iraq Displacement Modelling
 
-*Working draft prepared by by Chungmann Kim with analytical support (e.g. summarizing results from figures and tables) from Claude Sonnet 4.6*
+*Working draft prepared by by Chungmann Kim with analytical support from Claude Sonnet 4.6*
 
 *Last updated: 2026-05-29.*
 
@@ -564,5 +564,3 @@ This regional and temporal stratification allows the analysis to assess whether:
 **Table A4.** Significance summary across all cells — `model_results_b3_significance.csv`
 
 ---
-* Draft supported by Claude Sonnet (e.g. summarizing results from figures and tables) validated by Chungmann Kim
-* Last updated: 2026-05-29.
