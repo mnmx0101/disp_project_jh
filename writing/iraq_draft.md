@@ -1,6 +1,6 @@
 # Iraq Displacement Modelling
 
-*Working draft prepared by by Chungmann Kim with analytical support from Claude Sonnet 4.6*
+*Working draft prepared by by Chungmann Ki*
 
 *Last updated: 2026-05-29.*
 
