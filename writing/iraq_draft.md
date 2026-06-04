@@ -211,16 +211,16 @@ In practice, spatial lags are computed through matrix multiplication, \(\mathbf{
 
 ### 7.1 Main Estimating Framework
 
-The empirical analysis uses a two-way fixed-effects panel model with both own-district and neighboring-district exposures:
+The empirical analysis uses a two-way fixed-effects panel model with both own-district and neighboring-district exposures. In the default specification, all included indicators enter at two common temporal horizons: a short-run window (`L1-3`) and a longer-run window (`L10-12`).
 
-$$
+$$	
 \ln(\text{IDP}_{d,t}) =
-\alpha + \gamma_d + \lambda_t + \rho W\ln(\text{IDP})_{d,t-1}
-+ \sum_{n=1}^{k}
+\alpha + \gamma_d + \lambda_t + \rho \ln(\text{IDP})_{d,t-1}
++ \sum_{n=1}^{k} \sum_{\tau \in \{\text{L1-3}, \text{L10-12}\}}
 \left(
-\beta_{1n}^{own} X_{n,d,t-\tau^{own}_n}
+\beta_{1n\tau}^{own} X_{n,d,t-\tau}
 +
-\beta_{2n}^{neigh} WX_{n,d,t-\tau^{neigh}_n}
+\beta_{2n\tau}^{neigh} WX_{n,d,t-\tau}
 \right)
 + \epsilon_{d,t}
 $$
@@ -233,10 +233,10 @@ where:
 - \(\lambda_t\) denotes month fixed effects, which absorb nationwide shocks, macroeconomic conditions, and seasonality common to all districts.
 - \(W\ln(\mathrm{IDP})_{d,t-1}\) is the one-period lagged spatially weighted average of neighboring districts’ logged IDP stocks.
 - \(\rho\) captures spatial persistence in displacement stocks across connected districts.
-- \(X_{n,d,t-\tau_n^{\mathrm{own}}}\) is the own-district exposure for indicator \(n\), evaluated at its selected lag.
-- \(WX_{n,d,t-\tau_n^{\mathrm{neigh}}}\) is the neighboring-district exposure for the same indicator, evaluated at its selected spatial lag.
-- \(\beta_{1n}^{\mathrm{own}}\) measures the association between local exposure and local IDP stock.
-- \(\beta_{2n}^{\mathrm{neigh}}\) measures the association between neighboring exposure and local IDP stock.
+- \(X_{n,d,t-\tau}\) is the own-district exposure for indicator \(n\), evaluated at lag window \(\tau \in \{\text{L1-3}, \text{L10-12}\}\).
+- \(WX_{n,d,t-\tau}\) is the neighboring-district exposure for the same indicator, evaluated at the same lag window \(\tau\).
+- \(\beta_{1n\tau}^{\mathrm{own}}\) measures the association between local exposure and local IDP stock at horizon \(\tau\).
+- \(\beta_{2n\tau}^{\mathrm{neigh}}\) measures the association between neighboring exposure and local IDP stock at horizon \(\tau\).
 - \(\epsilon_{d,t}\) is the error term.
 
 Standard errors are clustered at the district level throughout.
@@ -248,33 +248,33 @@ The model is designed to distinguish two conceptually different channels for eac
 - The own-district term captures whether conditions within district \(d\) are associated with IDP stock accumulation in that same district.
 - The spatial-lag term captures whether conditions in connected neighboring districts are associated with IDP stock accumulation in district \(d\).
 
-This distinction is central to the paper’s design. For every selected indicator, the specification allows both a local association and a regional spillover association to enter simultaneously.
+This distinction is central to the paper’s design. For every included indicator, the specification allows both a local association and a regional spillover association to enter simultaneously.
 
-### 7.3 Lag Structure and Stage A Selection
+### 7.3 Fixed Lag Structure
 
-The model also allows each indicator to operate over different temporal horizons. Rather than imposing a common lag structure, temporal windows are selected empirically in a first-stage bivariate screening exercise.
+The main specification imposes a common temporal structure across all indicators rather than selecting different lag windows variable by variable.
 
-For each indicator, region, and effect type (own-district versus spatial-neighbor), bivariate regressions are estimated across four lag windows:
+Specifically, each own-district and spatial-neighbor term enters twice:
 
-- short-run windows: `L1-3` and `L4-6`
-- longer-run windows: `L7-9` and `L10-12`
+- once at `L1-3`, representing short-run exposure
+- once at `L10-12`, representing longer-run exposure
 
-The selected lag for a given term is the window with the largest absolute t-statistic. Own-district and spatial-neighbor terms are screened separately, so the selected local lag and the selected spillover lag may differ for the same indicator.
+This fixed-lag design is used to make coefficients more directly comparable across indicators and across own versus spatial channels. It also reduces dependence on variable-specific lag optimization, which can otherwise make cross-indicator comparison harder to interpret.
 
 As a result, the final specification includes:
-- both own-district and spatial-neighbor terms for each selected indicator
-- each term entering at its own empirically selected optimal lag
-- selected lags that may represent either shorter-run or longer-run associations depending on the Stage A results
+- both own-district and spatial-neighbor terms for each included indicator
+- both shorter-run (`L1-3`) and longer-run (`L10-12`) terms for each indicator
+- the same temporal structure across thematic blocks, regions, and sample splits
 
-Lag selection is performed using the pooled sample only, and the resulting lag structure is then held fixed for the pre-break and post-break estimations.
+Alternative lag windows (`L4-6` and `L7-9`) are retained for sensitivity checks and exploratory diagnostics, but they are not part of the default estimating framework reported here.
 
 ### 7.4 Three Thematic Blocks
 
-The full estimating framework is implemented through three nested thematic blocks.
+The full estimating framework is implemented through three nested thematic blocks based on the reduced indicator set used in the fixed-lag specification.
 
-- **B1 (Conflict only):** conflict deaths and conflict events, each included as both own-district and spatial-neighbor terms at their selected lags.
-- **B2 (+ Climate):** B1 plus SPI-6, temperature anomaly, NDVI anomaly, and soil moisture anomaly, again each included as both own-district and spatial-neighbor terms at selected lags.
-- **B3 (+ Economic):** B2 plus food inflation and fuel price, each included as both own-district and spatial-neighbor terms at selected lags.
+- **B1 (Conflict only):** log conflict deaths, included as both own-district and spatial-neighbor terms at `L1-3` and `L10-12`.
+- **B2 (+ Climate):** B1 plus SPI-based flood severity, SPI-based drought severity, maximum temperature anomaly, NDVI anomaly, and soil moisture anomaly, again each included as both own-district and spatial-neighbor terms at `L1-3` and `L10-12`.
+- **B3 (+ Economic):** B2 plus food price inflation, included as both own-district and spatial-neighbor terms at `L1-3` and `L10-12`.
 
 Thus, the B3 specification is the full model, while B1 and B2 are restricted versions used to assess how explanatory power changes as additional thematic channels are added.
 
@@ -330,7 +330,7 @@ This regional and temporal stratification allows the analysis to assess whether:
 
 | **North Iraq** | **South Iraq** |
 |---|---|
-| ![Figure 5: R² Progression North](../results/figures/fig4_r2_progression_north.png) | ![Figure 5: R² Progression South](../results/figures/fig4_r2_progression_south.png) |
+| ![Figure 5: R² Progression North](../results2/figures/fig4_r2_progression_north.png) | ![Figure 5: R² Progression South](../results2/figures/fig4_r2_progression_south.png) |
 
 **Table 3. Within-R² by Block, Sample, and Region**
 
@@ -352,67 +352,53 @@ This regional and temporal stratification allows the analysis to assess whether:
 
 > **Figure 6.** Forest plot — North Iraq, IDP stock (ln_idp), B3 full model. Three columns: pooled / pre-2018 / post-2018. Bars = standardized β (90% CI); filled = p<0.10, grey = p≥0.10. Y-axis color-coded by theme: red = conflict, blue = climate, green = economic.
 
-![Figure 6: Forest Plot North ln_idp](../results/figures/fig5_forest_north_ln_idp.png)
+![Figure 6: Forest Plot North ln_idp](../results2/figures/fig5_forest_north_ln_idp.png)
 
 > **Figure 7.** Forest plot — South Iraq, IDP stock (ln_idp), B3 full model. Same layout as Figure 6.
 
-![Figure 7: Forest Plot South ln_idp](../results/figures/fig5_forest_south_ln_idp.png)
-**Table 4. Significant Coefficients from the B3 Full Model for `ln_idp`** *(p < 0.10; standardized coefficients with clustered SEs)*
+![Figure 7: Forest Plot South ln_idp](../results2/figures/fig5_forest_south_ln_idp.png)
+**Table 4. Significant Coefficients from the B3 Full Model for `ln_idp`** *(p < 0.05; raw coefficients with clustered SEs)*
 
 **Panel A. North Iraq**
 
-| Sample | Theme | Variable | Exposure | Lag window | Std. β | SE | p-value |
-|--------|-------|----------|----------|------------|-------:|---:|--------:|
-| Pooled | Conflict | Deaths (log) | Spatial | L1–3 | +0.0231 | 0.0112 | 0.040 |
-| Pooled | Conflict | Deaths (log) | Spatial | L10–12 | −0.0183 | 0.0083 | 0.028 |
-| Pooled | Climate | Soil moisture | Own | L10–12 | +0.0146 | 0.0069 | 0.033 |
-| Pooled | Climate | Drought severity | Spatial | L10–12 | +0.0212 | 0.0111 | 0.057 |
-| Pooled | Climate | SPI-6 | Spatial | L7–9 | +0.0296 | 0.0124 | 0.017 |
-| Pooled | Climate | Temp anomaly (max) | Own | L1–3 | +0.0110 | 0.0055 | 0.043 |
-| Pooled | Climate | Temp anomaly (max) | Spatial | L7–9 | +0.0505 | 0.0281 | 0.072 |
-| Pre-2018 | Conflict | Events (log) | Own | L10–12 | +0.0282 | 0.0159 | 0.077 |
-| Pre-2018 | Conflict | Deaths (log) | Spatial | L10–12 | −0.0491 | 0.0198 | 0.013 |
-| Pre-2018 | Conflict | Events (log) | Spatial | L7–9 | −0.0277 | 0.0159 | 0.081 |
-| Pre-2018 | Climate | SPI-6 | Own | L10–12 | +0.0406 | 0.0188 | 0.031 |
-| Pre-2018 | Economic | Food inflation | Spatial | L10–12 | −0.0516 | 0.0311 | 0.097 |
-| Post-2018 | Conflict | Events (log) | Spatial | L7–9 | −0.0202 | 0.0087 | 0.020 |
-| Post-2018 | Climate | SPI-6 | Spatial | L7–9 | +0.0719 | 0.0323 | 0.026 |
-| Post-2018 | Climate | Temp anomaly (max) | Spatial | L7–9 | +0.0908 | 0.0493 | 0.065 |
+| Sample | Theme | Variable | Exposure | Lag window | β | SE | p-value |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Pooled | Conflict | Deaths (log) | Spatial | L1–3 | +0.1970 | 0.0619 | 0.001 |
+| Pooled | Climate | Drought severity | Spatial | L10–12 | +0.0378 | 0.0184 | 0.040 |
+| Pooled | Climate | Flood severity | Spatial | L1–3 | +0.0195 | 0.0095 | 0.040 |
+| Pooled | Climate | Flood severity | Spatial | L10–12 | -0.0147 | 0.0073 | 0.043 |
+| Pooled | Climate | Soil moisture | Own | L10–12 | +0.9259 | 0.4421 | 0.036 |
+| Pooled | Climate | Soil moisture | Spatial | L1–3 | -2.7152 | 1.2876 | 0.035 |
+| Pooled | Climate | Temp anomaly (max) | Own | L1–3 | +0.0343 | 0.0139 | 0.014 |
+| Pre-2018 | Conflict | Deaths (log) | Spatial | L1–3 | +0.1896 | 0.0726 | 0.009 |
+| Pre-2018 | Conflict | Deaths (log) | Spatial | L10–12 | -0.2833 | 0.1207 | 0.019 |
+| Pre-2018 | Climate | Flood severity | Spatial | L1–3 | +0.0975 | 0.0395 | 0.014 |
+| Pre-2018 | Climate | NDVI anomaly | Spatial | L10–12 | +5.8411 | 2.5498 | 0.022 |
+| Pre-2018 | Climate | Temp anomaly (max) | Own | L1–3 | +0.0750 | 0.0316 | 0.018 |
+| Pre-2018 | Climate | Temp anomaly (max) | Spatial | L10–12 | -0.1763 | 0.0861 | 0.041 |
 
 **Panel B. South Iraq**
 
-| Sample | Theme | Variable | Exposure | Lag window | Std. β | SE | p-value |
-|--------|-------|----------|----------|------------|-------:|---:|--------:|
-| Pooled | Conflict | Events (log) | Own | L10–12 | −0.0094 | 0.0052 | 0.073 |
-| Pooled | Climate | NDVI anomaly | Spatial | L1–3 | −0.0342 | 0.0125 | 0.006 |
-| Pooled | Climate | Drought severity | Spatial | L7–9 | −0.0073 | 0.0036 | 0.041 |
-| Pooled | Climate | Flood severity | Spatial | L4–6 | +0.0603 | 0.0266 | 0.024 |
-| Pooled | Climate | Temp anomaly (max) | Spatial | L7–9 | +0.0320 | 0.0109 | 0.003 |
-| Pooled | Economic | Fuel price (log) | Own | L4–6 | +0.0083 | 0.0038 | 0.030 |
-| Pooled | Economic | Fuel price (log) | Own | L7–9 | −0.0175 | 0.0080 | 0.029 |
-| Pre-2018 | Conflict | Deaths (log) | Own | L10–12 | −0.0191 | 0.0098 | 0.052 |
-| Pre-2018 | Conflict | Events (log) | Own | L10–12 | +0.0179 | 0.0108 | 0.096 |
-| Pre-2018 | Conflict | Events (log) | Spatial | L10–12 | +0.0684 | 0.0388 | 0.078 |
-| Pre-2018 | Climate | Soil moisture | Own | L1–3 | +0.0180 | 0.0104 | 0.085 |
-| Pre-2018 | Climate | Flood severity | Own | L4–6 | +0.0184 | 0.0091 | 0.044 |
-| Pre-2018 | Climate | Flood severity | Own | L7–9 | −0.0209 | 0.0081 | 0.010 |
-| Pre-2018 | Climate | Flood severity | Spatial | L7–9 | +0.0240 | 0.0126 | 0.056 |
-| Pre-2018 | Climate | SPI-6 | Spatial | L4–6 | −0.0681 | 0.0408 | 0.095 |
-| Post-2018 | Conflict | Deaths (log) | Own | L10–12 | +0.0121 | 0.0054 | 0.025 |
-| Post-2018 | Conflict | Events (log) | Own | L10–12 | −0.0133 | 0.0063 | 0.036 |
-| Post-2018 | Conflict | Deaths (log) | Spatial | L10–12 | +0.0196 | 0.0088 | 0.026 |
-| Post-2018 | Conflict | Events (log) | Spatial | L10–12 | −0.0228 | 0.0110 | 0.039 |
-| Post-2018 | Climate | NDVI anomaly | Own | L4–6 | +0.0104 | 0.0052 | 0.045 |
-| Post-2018 | Climate | NDVI anomaly | Spatial | L1–3 | −0.0448 | 0.0227 | 0.049 |
-| Post-2018 | Climate | NDVI anomaly | Spatial | L7–9 | +0.0315 | 0.0166 | 0.058 |
-| Post-2018 | Climate | Temp anomaly (max) | Spatial | L7–9 | +0.1223 | 0.0415 | 0.003 |
-| Post-2018 | Economic | Food inflation | Own | L4–6 | +0.0067 | 0.0032 | 0.034 |
-| Post-2018 | Economic | Food inflation | Own | L10–12 | +0.0077 | 0.0028 | 0.006 |
-| Post-2018 | Economic | Fuel price (log) | Own | L4–6 | +0.0141 | 0.0082 | 0.086 |
-| Post-2018 | Economic | Fuel price (log) | Own | L7–9 | −0.0277 | 0.0168 | 0.099 |
-| Post-2018 | Economic | Food inflation | Spatial | L1–3 | −0.0298 | 0.0161 | 0.064 |
+| Sample | Theme | Variable | Exposure | Lag window | β | SE | p-value |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Pooled | Conflict | Deaths (log) | Spatial | L10–12 | +0.2589 | 0.0851 | 0.002 |
+| Pooled | Climate | NDVI anomaly | Spatial | L1–3 | -3.0846 | 1.4821 | 0.038 |
+| Pooled | Climate | Soil moisture | Spatial | L1–3 | -1.7409 | 0.7664 | 0.023 |
+| Pooled | Climate | Temp anomaly (max) | Own | L10–12 | +0.0230 | 0.0085 | 0.007 |
+| Pooled | Economic | Food inflation | Own | L10–12 | +0.0014 | 0.0006 | 0.015 |
+| Pre-2018 | Climate | Flood severity | Own | L1–3 | +0.0308 | 0.0100 | 0.002 |
+| Pre-2018 | Climate | Flood severity | Own | L10–12 | -0.0500 | 0.0146 | 0.001 |
+| Pre-2018 | Climate | Flood severity | Spatial | L10–12 | +0.0862 | 0.0334 | 0.010 |
+| Pre-2018 | Climate | Soil moisture | Own | L1–3 | +1.7524 | 0.7674 | 0.023 |
+| Pre-2018 | Climate | Temp anomaly (max) | Own | L10–12 | +0.0442 | 0.0149 | 0.003 |
+| Post-2018 | Climate | NDVI anomaly | Own | L1–3 | +0.4320 | 0.1591 | 0.007 |
+| Post-2018 | Climate | NDVI anomaly | Spatial | L1–3 | -3.0249 | 1.0273 | 0.003 |
+| Post-2018 | Climate | Temp anomaly (max) | Spatial | L10–12 | -0.1007 | 0.0436 | 0.021 |
+| Post-2018 | Economic | Food inflation | Own | L1–3 | +0.0022 | 0.0007 | 0.002 |
+| Post-2018 | Economic | Food inflation | Own | L10–12 | +0.0022 | 0.0006 | 0.000 |
+| Post-2018 | Economic | Food inflation | Spatial | L10–12 | +0.0090 | 0.0035 | 0.010 |
 
-*Standardized coefficients are reported as `β × SD(x) / SD(y)`. Full coefficient outputs are available in Appendix Table A2 (`model_results_b3_ln_idp.csv`); `dlog_idp` results are reported in Appendix Table A3.*
+*Raw coefficients (`β`) and clustered standard errors are reported from the B3 specification. Full coefficient outputs are available in Appendix Table A2 (`model_results_b3_ln_idp.csv`); `dlog_idp` results are reported in Appendix Table A3.*
 
 ### 9.4 Regional and Temporal Comparison
 
@@ -420,45 +406,22 @@ This regional and temporal stratification allows the analysis to assess whether:
 
 | Dimension | North | South |
 |-----------|-------|-------|
-| N (obs) | 4,140 | 2,760 |
-| Within-R² (B3) | 0.893 | 0.910 |
-| Dominant channel | **Conflict (spatial)** | **Climate + Economic** |
-| Conflict terms significant (pooled) | 2 (both spatial) | 0 |
-| Climate terms significant (pooled) | 3 | 7 |
-| Economic terms significant (pooled) | 0 | 3 |
-| Own vs. spatial dominance | Spatial-only | Spatial (climate); own (economic) |
-| Largest pooled coefficient | Spatial temp L7–9: +0.077 | Spatial flood severity L4–6: +0.061 |
-| Largest post-break coefficient | — | Spatial temp L7–9: **+0.117** (p=0.001) |
+| Pooled significant terms (total) | 7 | 5 |
+| Pooled conflict terms | 1 (`Deaths`, spatial, `L1–3`) | 1 (`Deaths`, spatial, `L10–12`) |
+| Pre-2018 dominant pattern | Spatial conflict plus mixed climate | Climate-only |
+| Post-2018 dominant pattern | No coefficients at p < 0.05 | Climate plus food inflation |
+| Largest pooled coefficient (abs. β) | Spatial soil moisture `L1–3`: `−2.715` | Spatial NDVI `L1–3`: `−3.085` |
+| Largest post-break coefficient (abs. β) | None at p < 0.05 | Spatial NDVI `L1–3`: `−3.025` |
 
 ### 9.5 Synthesis
 
-**Finding 1: North is conflict-driven; South is climate- and livelihood-driven**
+**Finding 1: The North and South differ mainly in timing and thematic mix.** In the pooled results, both regions show a spatial conflict term, but the North retains a stronger pre-2018 conflict pattern while the South looks more climate-linked and, after 2018, more tied to food inflation.
 
-**Finding 2: Spatial spillovers dominate own-district effects in the North**
-- All significant pooled North terms are spatial lags — displacement in North Iraq accumulates in response to regional conflict pressure, not only local conditions
-- Neighbor conflict deaths at L1–3 (β=+0.025, p=0.012): IS advance ripples outward before arriving locally — consistent with anticipatory displacement
-- Neighbor conflict deaths at L10–12 (β=−0.049 pre-break, p=0.005): long sequential lag suggests displacement cascades across districts over time
+**Finding 2: The pre/post break is much clearer in the South than in the North.** In the North, pre-2018 combines spatial conflict with mixed climate terms, but post-2018 no coefficient remains significant at `p < 0.05`. In the South, post-2018 climate and food-inflation predictors remain visible, while conflict drops out of the significant set.
 
-**Finding 3: A clean structural break in the North at 2018**
-- Pre-2018: conflict completely dominates; climate and economic terms absent
-- Post-2018: conflict fatalities drop out entirely; 5 new climate terms emerge (SPI-6 and flood severity, own and spatial)
-- This is a regime transition, not a gradual shift — the dominant displacement mechanism changed fundamentally after IS defeat
+**Finding 3: Spillovers stand out more than local effects.** Several of the largest pooled coefficients in both regions come from neighboring rather than own-district variables, especially neighboring soil moisture in the North and neighboring NDVI in the South, which reinforces the idea that displacement responds to shocks unfolding across connected districts.
 
-**Finding 4: South post-2018 shows the most dramatic transformation in the dataset**
-- R² jump of +0.189 (0.709 → 0.898) from pre to post — displacement becomes substantially more predictable after 2018
-- Conflict appears for the first time post-2018, but only at L10–12 — chronic accumulation from distant violence, not acute outflow
-- Spatial temperature anomaly at L7–9 (β=+0.117, p=0.001) is the single strongest coefficient in the entire dataset — heat stress from neighboring districts propagates to local IDP accumulation with a ~2-quarter lag
-
-
-**Finding 5: Fuel price is the dominant economic predictor**
-- Fuel price own L4–6 (β=+0.011, p=0.001 pooled; β=+0.022, p=0.003 post-break) — strongest economic signal
-- Consistent with Iraq's subsidy-dependent energy economy — price shocks disproportionately affect poor households' mobility calculus [CITE: energy subsidy / welfare literature]
-
-
-**Finding 6: Climate operates primarily through spatial channels (except economic shocks)**
-- 8 of 10 significant pooled South climate terms are spatial lags
-- Own-district climate effects are present but weaker — local shocks matter less than regional environmental stress
-- Exception: economic variables are own-district — market prices are district-specific, not spatially averaged
+**Finding 4: These results should still be read cautiously.** The largest raw coefficients come from environmental variables on different scales, and some signs vary across periods and exposure types, so they are better treated as clues for refinement than as settled causal effects. The updated results also do not support the earlier draft's stronger claims about a clean post-2018 North climate transition or fuel price as the dominant economic channel.
 
 ---
 
