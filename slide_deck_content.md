@@ -34,20 +34,20 @@
 
 > **Monthly growth in the recorded district-level IDP stock**
 
-### Equation
+### Fundamental Equation
 
 $$
-g_{it} = \Delta \ln(\text{IDP}_{it}+1)
+\text{IDP}_t = \text{IDP}_{t-1} + \text{Arrivals} - \text{Returns} - \text{Secondary departures}
 $$
 
-Where $g_{it}$ represents the monthly proportional growth rate of the recorded IDP population.
+The regression models the growth of this **net stock** ($g_{it} = \Delta \ln(\text{IDP}_{it}+1)$) rather than the underlying flows.
 
 ### Important interpretation
 
-This growth reflects the net effect of arrivals, departures, returns, onward movements, and administrative revisions. Therefore, the model explains **growth in recorded IDP stocks**, not individual displacement decisions or migration flows.
+Because we model net stock growth, the underlying flow mechanisms remain ambiguous. The model explains **growth in recorded IDP stocks**, not individual displacement decisions or specific migration flows.
 
 > **Implication (What this means in practice):**
-> If a district experiences greener-than-usual conditions (a positive NDVI anomaly) and we observe negative IDP stock growth, this does *not* necessarily mean the greenery forced people to migrate *out* of the district. Possible pathways include returns, departures, or reduced arrivals.
+> If a district experiences greener-than-usual conditions (a positive NDVI anomaly) and we observe negative IDP stock growth, this does *not* necessarily mean the greenery forced people to migrate *out* of the district. Possible pathways consistent with this outcome include returns, departures, or reduced arrivals.
 
 ### Interpreting Net Stock Growth
 
@@ -274,7 +274,7 @@ Because the outcome is the **monthly log growth rate** ($\Delta\ln(\text{IDP}_{i
 
 ### Core Findings: Signals Consistent Across Specifications
 
-| Region          | Primary Driver               | Timing        | M0 (Block)        | M1 (+Conflict)   | M2 (+Climate)    | M3 (+Econ)       |
+| Region          | Most consistent empirical signal | Timing        | M0 (Control Only) | M1 (+Conflict)   | M2 (+Climate)    | M3 (+Econ)       |
 | :-------------- | :--------------------------- | :------------ | :---------------- | :--------------- | :--------------- | :--------------- |
 | **North** | **Connected Conflict** | $L_{10-12}$ | $+0.248^{***}$  | $+0.227^{***}$ | $+0.216^{***}$ | $+0.217^{***}$ |
 | **North** | **NDVI Anomaly**       | $L_{1-3}$   | $-0.419^{***}$  | —               | $-0.379^{***}$ | $-0.375^{***}$ |
@@ -293,11 +293,8 @@ Because the outcome is the **monthly log growth rate** ($\Delta\ln(\text{IDP}_{i
 
 ### Model Fit Statistics (Variance Explained)
 
-To understand how much of the displacement variation is explained by our predictors, we rely on two key metrics:
-
-* **Within $R^2$:** Of the variation left *after* removing permanent district differences and national monthly trends (the fixed effects), how much do our conflict, climate, and economic predictors explain? This is the most stringent and meaningful metric.
-* **Two-way FE $R^2$:** Roughly equivalent to Within $R^2$ in our specification, computed over the same demeaned data but using a slightly different denominator for the grand mean. Reported for completeness.
-* **Inclusive $R^2$:** Of the *total* raw variation in IDP growth, how much does the *entire* model explain, including the explanatory power of the district and month fixed effects?
+* **Fixed effects** (district and month) explain much of the persistent differences between districts and national temporal trends.
+* **Conflict, climate, and economic shocks** explain an additional 5–16% of the idiosyncratic month-to-month variation.
 
 | Region | Metric | M0 (Control Only) | M1 (+Conflict) | M2 (+Climate) | M3 (+Econ) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -308,13 +305,11 @@ To understand how much of the displacement variation is explained by our predict
 | **South** | Two-way FE $R^2$ | 0.074 | 0.081 | 0.086 | 0.087 |
 | **South** | Inclusive $R^2$ | 0.506 | 0.509 | 0.512 | 0.513 |
 
-> **Note on small $R^2$ values:** A Within $R^2$ of 0.05–0.16 is expected and meaningful in panel models with heavy fixed effects. The fixed effects themselves absorb the vast majority of total IDP variation (e.g., historical wealth or structural differences between districts). What remains is the highly idiosyncratic month-to-month fluctuation, of which our shocks successfully explain a meaningful fraction.
-
 ---
 
 # Slide 8. Possible pathways consistent with the empirical results
 
-> Our empirical estimates are consistent with distinct behavioral pathways—such as delayed returns in the North due to regional insecurity, and secondary departures in the South due to environmental stress.
+> Our empirical estimates are consistent with distinct behavioral pathways—such as regional insecurity limiting returns in the North, and environmental stress driving departures in the South.
 
 *(Note: The regression estimates net stock growth. The outcome cannot definitively distinguish between fewer arrivals, more departures, or more returns.)*
 
@@ -323,21 +318,21 @@ To understand how much of the displacement variation is explained by our predict
 * **Finding:** Historical *neighboring* conflict ($L_{10-12}$) is positively associated with IDP stock growth.
 
   * **Econometric Interpretation:** Association retains a stable association after conditioning on local conflict, climate, and economic variables.
-  * **Possible Mechanisms:** May reflect continuing arrivals from unstable areas or delayed returns due to regional insecurity.
-* **Finding:** Positive NDVI anomalies ($L_{1-3}$) are negatively associated with IDP stock growth.
+  * **Possible pathways:** Consistent with continuing arrivals from unstable areas or delayed returns due to regional insecurity.
+* **Finding:** Districts greener than their surrounding region (NDVI anomalies, $L_{1-3}$) experience slower growth in recorded IDP stocks.
 
   * **Econometric Interpretation:** Acute local greening retains a stable association after conditioning on conflict and economic variables.
-  * **Possible Mechanisms:** May reflect improved livelihoods enabling returns, or fewer new arrivals.
+  * **Possible pathways:** Consistent with fewer new arrivals, increased returns, shorter displacement duration, or combinations of these.
 * **Finding:** Persistent precipitation anomalies ($L_{10-12}$) are positively associated with IDP stock growth.
 
   * **Econometric Interpretation:** Long-term rainfall maintains a stable positive association across specification blocks.
-  * **Possible Mechanisms:** May reflect increased local carrying capacity, allowing existing IDPs to remain in host districts longer.
+  * **Possible pathways:** Consistent with increased local carrying capacity, allowing existing IDPs to remain in host districts longer.
 
 ### The "Southern" Pattern
 
 * **Finding:** Negative long-term NDVI and severe chronic drought ($L_{10-12}$) are negatively associated with IDP stock growth.
   * **Econometric Interpretation:** Chronic environmental stress captures the variance in IDP changes, subsuming independent economic signals.
-  * **Possible Mechanisms:** May contribute to secondary departures (resource exhaustion) or delayed returns.
+  * **Possible pathways:** Consistent with secondary departures (resource exhaustion) or delayed returns.
 
 > **Caution:** Interpretations of the Southern dynamics should be made with caution. Displacement data in the South may be less comprehensive than in the North, potentially omitting localized or temporary movements.
 
@@ -352,6 +347,8 @@ Could these conclusions simply be artifacts of:
 * Lag choice?
 * Spatial definitions?
 * Data quality?
+
+> **Key Philosophy:** The goal is not to search for significant coefficients, but to test whether the main findings survive reasonable modeling choices.
 
 Let's stress-test the model.
 
@@ -447,13 +444,12 @@ We tested whether our findings are sensitive to the size of the spatial network 
 
 > Conflict spillover is fundamentally a regional phenomenon, while agricultural shocks operate strongly at the localized level above and beyond regional trends.
 
-### Definitions
+### Explicit Spatial Decomposition
 
 Rather than relying on vague terms, we decompose exposure mathematically:
 
-* $X_i$: Own-district exposure
-* $WX_i$: Spatially weighted (connected-district) exposure
-* $X_i - WX_i$: Local deviation from the regional environment
+* **Regional effect ($WX_i$):** Average exposure across connected districts.
+* **Relative local effect ($X_i - WX_i$):** How different this district is from its surrounding region.
 
 **Interpretation:**
 
@@ -478,6 +474,20 @@ Rather than relying on vague terms, we decompose exposure mathematically:
 | **Relative local process ($X - WX$)** | NDVI (N)                                   | Districts differ because they are better or worse than their surrounding region. |
 | **Both regional & relative**            | NDVI (S), Food prices (S)                  | Both the shared regional environment and local deviations from it matter.        |
 | **No robust spatial process**           | Precip, Flood, Temp, Fuel                  | No robust evidence once both spatial components are modeled jointly.             |
+
+---
+
+# Slide 13-2. Summary of Spatial Processes
+
+> **Regional spillovers are at least as important as local relative conditions.**
+
+| Variable | Dominant process |
+| :--- | :--- |
+| **Conflict** | Regional |
+| **NDVI (North)** | Relative local |
+| **NDVI (South)** | Regional + Relative |
+| **Drought** | Regional |
+| **Food prices** | Mixed |
 
 # Slide 14-1. Compound Shocks (Interactions)
 
@@ -554,10 +564,10 @@ Our baseline **M3 model** established that internal displacement is heterogeneou
 
 ### Conclusions
 
-1. **Regional Heterogeneity:** There is no single national pattern. Northern displacement is sensitive to connected conflict and acute agricultural shifts; Southern displacement responds to chronic environmental degradation.
-2. **Timing Matters:** Different exposures act on different timescales ($L_{1-3}$ vs $L_{10-12}$).
-3. **Displacement is Persistent:** Stock dynamics are heavily conditioned by prior accumulations, not just acute shocks.
-4. **Methodological Contribution:** Demonstrates a transparent, robust empirical framework that integrates climate, conflict, and economic data while navigating severe spatial collinearity.
+Three empirical features consistently emerge across all specifications:
+1. **Displacement is highly persistent:** Stock dynamics are heavily conditioned by prior accumulations, not just acute shocks.
+2. **Responses differ fundamentally between North and South:** Northern displacement is sensitive to acute agricultural shifts; Southern displacement responds to chronic environmental degradation.
+3. **Regional spillovers are at least as important as local shocks:** Ignoring connected-district environments masks the true scale of conflict and climate impacts.
 
 ### Limitations
 
@@ -573,6 +583,7 @@ Our baseline **M3 model** established that internal displacement is heterogeneou
 ### Projection Methodology
 
 Because the model predicts monthly stock growth ($g_{it}$) rather than static levels, it can be iteratively applied under alternative future scenarios.
+> **Important Caveat:** The projection illustrates how the empirical model could be used under hypothetical scenarios; it is not intended as an operational forecast.
 
 ### Concept Flow
 
