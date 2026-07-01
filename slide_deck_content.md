@@ -143,8 +143,7 @@ When data is missing for extended periods, linear interpolation creates long, fl
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------------ | :-------------------------- |
 | **Outcome**  | IDP Stock Growth ($\Delta \ln(\text{IDP}_{it}+1)$)                                                                      | Own District              | $t$ (Current)             |
 | **Conflict** | Conflict Deaths ($\ln(\text{deaths}+1)$)                                                                                | **Own & Connected** | $L_{1-3}$ & $L_{10-12}$ |
-| **Climate**  | SPI-6 (Moisture/Flood/Drought)
-Anomalies for Precip, Max Temp, NDVI`<br>`Anomalies for Soil Moisture, Streamflow | **Own District**    | $L_{1-3}$ & $L_{10-12}$ |
+| **Climate**  | SPI-6 (Moisture/Flood/Drought)`<br>`Anomalies for Precip, Max Temp, NDVI`<br>`Anomalies for Soil Moisture, Streamflow | **Own District**    | $L_{1-3}$ & $L_{10-12}$ |
 | **Economic** | Food-price Inflation (ADM1)`<br>`Fuel & Gas Prices                                                                      | **Own District**    | $L_{1-3}$ & $L_{10-12}$ |
 
 *\* **Temporal Default:** $L_{1-3}$ and $L_{10-12}$ represent **binned averages** over lags 1–3 and 10–12. The simultaneous inclusion of both is our default specification (M3). It is explicitly selected to account for both **short-term acute shocks** (e.g., immediate displacement) and **longer-term persistence** (e.g., compounding stress and delayed migration) simultaneously.*
@@ -291,6 +290,22 @@ Because the outcome is the **monthly log growth rate** ($\Delta\ln(\text{IDP}_{i
 
 * **Stable Signals:** The key coefficients (North connected conflict, North/South NDVI, South Drought, and North Precipitation) remain remarkably stable in both magnitude and significance as we step through M0 (Baseline) $\rightarrow$ M1 (Conflict) $\rightarrow$ M2 (Climate) $\rightarrow$ M3 (Economics).
 * **Economic Variables:** Inflation and fuel prices show weak or fragile signals once climate and conflict are controlled for, suggesting the primacy of environmental and security shocks.
+
+### Model Fit Statistics (Variance Explained)
+
+To understand how much of the displacement variation is explained by our predictors, we rely on two key metrics:
+
+* **Within $R^2$:** Of the variation left *after* removing permanent district differences and national monthly trends (the fixed effects), how much do our conflict, climate, and economic predictors explain? This is the most stringent and meaningful metric.
+* **Two-way FE $R^2$:** Roughly equivalent to Within $R^2$ in our specification, computed over the same demeaned data but using a slightly different denominator for the grand mean. Reported for completeness.
+
+| Region | Metric | M1 (+Conflict) | M2 (+Climate) | M3 (+Econ) |
+| :--- | :--- | :--- | :--- | :--- |
+| **North** | Within $R^2$ | 0.052 | 0.048 | 0.048 |
+| **North** | Two-way FE $R^2$ | 0.046 | 0.048 | 0.048 |
+| **South** | Within $R^2$ | 0.161 | 0.165 | 0.164 |
+| **South** | Two-way FE $R^2$ | 0.081 | 0.086 | 0.087 |
+
+> **Note on small $R^2$ values:** A Within $R^2$ of 0.05–0.16 is expected and meaningful in panel models with heavy fixed effects. The fixed effects themselves absorb the vast majority of total IDP variation (e.g., historical wealth or structural differences between districts). What remains is the highly idiosyncratic month-to-month fluctuation, of which our shocks successfully explain a meaningful fraction.
 
 ---
 
