@@ -7,7 +7,7 @@
 
 # Slide 1. What drives district-level IDP stock growth rates in Iraq?
 
-> We aim to isolate the independent effects of climate anomalies on internal displacement dynamics in Iraq, conditioning on conflict and economic shocks.
+> We aim to jointly model the independent and compounding effects of climate anomalies, conflict, and economic shocks on internal displacement dynamics in Iraq.
 
 ### *An empirical analysis of conflict, climate, and economic shocks (2014–2024)*
 
@@ -143,7 +143,8 @@ When data is missing for extended periods, linear interpolation creates long, fl
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------------ | :-------------------------- |
 | **Outcome**  | IDP Stock Growth ($\Delta \ln(\text{IDP}_{it}+1)$)                                                                      | Own District              | $t$ (Current)             |
 | **Conflict** | Conflict Deaths ($\ln(\text{deaths}+1)$)                                                                                | **Own & Connected** | $L_{1-3}$ & $L_{10-12}$ |
-| **Climate**  | SPI-6 (Moisture/Flood/Drought)`<br>`Anomalies for Precip, Max Temp, NDVI`<br>`Anomalies for Soil Moisture, Streamflow | **Own District**    | $L_{1-3}$ & $L_{10-12}$ |
+| **Climate**  | SPI-6 (Moisture/Flood/Drought)
+Anomalies for Precip, Max Temp, NDVI`<br>`Anomalies for Soil Moisture, Streamflow | **Own District**    | $L_{1-3}$ & $L_{10-12}$ |
 | **Economic** | Food-price Inflation (ADM1)`<br>`Fuel & Gas Prices                                                                      | **Own District**    | $L_{1-3}$ & $L_{10-12}$ |
 
 *\* **Temporal Default:** $L_{1-3}$ and $L_{10-12}$ represent **binned averages** over lags 1–3 and 10–12. The simultaneous inclusion of both is our default specification (M3). It is explicitly selected to account for both **short-term acute shocks** (e.g., immediate displacement) and **longer-term persistence** (e.g., compounding stress and delayed migration) simultaneously.*
@@ -151,6 +152,7 @@ When data is missing for extended periods, linear interpolation creates long, fl
 **Key Modeling Rules:**
 
 * **Conflict Routing:** Connected-district conflict is included to capture violence affecting displacement routes and regional insecurity.
+* **Spatial Weight Matrix ($W$):** Constructed using travel-time (friction surface) rather than simple contiguous borders. It captures realistic human mobility networks using an unrestricted ($K=\text{ALL}$) inverse travel-time decay.
 * **Climate Collinearity:** Connected-district climate is excluded from the baseline model due to severe spatial collinearity (**Pearson correlation > 0.90**) but is tested later.
 * **Anomalies Definition:** Defined as $A_{d,t}=X_{d,t}-\overline{X}_{d,m(t)}$, meaning values represent deviations from a district's own **long-term historical average for that specific calendar month** (e.g., NDVI baseline is 2001–2024). This isolates true climate shocks from expected seasonal weather patterns.
 
