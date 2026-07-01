@@ -524,6 +524,7 @@ To ensure our linear assumptions aren't masking complex thresholds or diminishin
 
 1. **Diminishing Marginal Effects (South):** Both persistent agricultural decay (NDVI) and historical conflict in the South exhibit concave relationships. As NDVI drops, IDP stock surges—but the negative squared term suggests this rate of growth moderates at extreme levels of degradation.
 2. **Threshold "Tipping Points" (North):** In the North, normal fluctuations in long-term NDVI ($L_{10-12}$) have no significant linear effect, but crossing an *extreme degradation* threshold triggers a significant jump ($+0.039^{**}$) in IDP stocks.
+3. **Strict Linearity of Other Core Signals:** Squared terms for the North's acute NDVI ($L_{1-3}$) and connected conflict ($L_{10-12}$) were statistically insignificant. This confirms that these core drivers operate strictly linearly, consistently increasing displacement without saturating.
 
 > **Main conclusion:** The linear specification captures primary trends, while nonlinear diagnostics reveal that Southern displacement saturates at extreme levels, whereas Northern climate impacts function as threshold-based tipping points.
 
