@@ -509,11 +509,14 @@ To ensure our linear assumptions aren't masking complex thresholds or diminishin
 
 ### Key Significant Nonlinearities
 
-| Nonlinearity Test                                       | Region          | Linear Term$\beta$ | Nonlinear/Squared Term$\beta$  |
+| Nonlinearity Test                                       | Region          | Linear Term $\beta$ | Nonlinear/Squared Term $\beta$  |
 | :------------------------------------------------------ | :-------------- | :------------------- | :------------------------------- |
+| **NDVI Anomaly Squared** ($L_{1-3}$)            | **North** | $-0.501^{**}$      | $0.001$ (ns, Linear only)      |
+| **Connected Conflict Squared** ($L_{10-12}$)    | **North** | $+0.206^{**}$      | $0.002$ (ns, Linear only)      |
+| **Extreme Degradation Threshold** ($L_{10-12}$) | **North** | $+0.119$ (ns)      | $+0.039^{**}$ (Threshold Jump) |
 | **NDVI Anomaly Squared** ($L_{10-12}$)          | **South** | $-0.758^{***}$     | $-0.005^{**}$ (Concave)        |
 | **Own Conflict Squared** ($L_{10-12}$)          | **South** | $+0.054^{***}$     | $-0.025^{***}$ (Concave)       |
-| **Extreme Degradation Threshold** ($L_{10-12}$) | **North** | $+0.119$ (ns)      | $+0.039^{**}$ (Threshold Jump) |
+| **Connected Conflict Squared** ($L_{1-3}$)      | **South** | $+0.226^{*}$       | $0.002$ (ns, Linear only)      |
 
 *(Note: Threshold tests bottom quartile of NDVI, indicating severe agricultural stress)*
 
