@@ -297,13 +297,16 @@ To understand how much of the displacement variation is explained by our predict
 
 * **Within $R^2$:** Of the variation left *after* removing permanent district differences and national monthly trends (the fixed effects), how much do our conflict, climate, and economic predictors explain? This is the most stringent and meaningful metric.
 * **Two-way FE $R^2$:** Roughly equivalent to Within $R^2$ in our specification, computed over the same demeaned data but using a slightly different denominator for the grand mean. Reported for completeness.
+* **Inclusive $R^2$:** Of the *total* raw variation in IDP growth, how much does the *entire* model explain, including the explanatory power of the district and month fixed effects?
 
 | Region | Metric | M0 (Control Only) | M1 (+Conflict) | M2 (+Climate) | M3 (+Econ) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **North** | Within $R^2$ | 0.039 | 0.052 | 0.048 | 0.048 |
 | **North** | Two-way FE $R^2$ | 0.041 | 0.046 | 0.048 | 0.048 |
+| **North** | Inclusive $R^2$ | 0.151 | 0.155 | 0.157 | 0.157 |
 | **South** | Within $R^2$ | 0.069 | 0.161 | 0.165 | 0.164 |
 | **South** | Two-way FE $R^2$ | 0.074 | 0.081 | 0.086 | 0.087 |
+| **South** | Inclusive $R^2$ | 0.506 | 0.509 | 0.512 | 0.513 |
 
 > **Note on small $R^2$ values:** A Within $R^2$ of 0.05–0.16 is expected and meaningful in panel models with heavy fixed effects. The fixed effects themselves absorb the vast majority of total IDP variation (e.g., historical wealth or structural differences between districts). What remains is the highly idiosyncratic month-to-month fluctuation, of which our shocks successfully explain a meaningful fraction.
 
